@@ -12,6 +12,8 @@ class MlbPlayersNameConst {
     
     public const CACHE_DIR = __DIR__.'/../data/';
 
-    public const DATA_FILEPATH = __DIR__.'/../data/player.csv';
+    public const DATA_FILEPATH_ALL = __DIR__.'/../data/allplayer.csv';
+
+    public const DATA_FILEPATH= __DIR__.'/../data/player.csv';
 
 }

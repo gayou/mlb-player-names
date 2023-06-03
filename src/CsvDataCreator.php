@@ -50,6 +50,7 @@ class CsvDataCreator {
     private static function createCsvData()
     {
         $data = [];
+        $alldata = [];
         $document = new DOMDocument();
         foreach (glob(MlbPlayersNameConst::CACHE_DIR.'*.html') as $file_path) {
             // htmlファイルロード
@@ -63,7 +64,29 @@ class CsvDataCreator {
             $result = $xpath->query('//table[@class="wikitable"]/tbody/tr[count(td) = 5]');
             foreach ($result as $row) {
                 $player = $xpath->query(".//td", $row);
-                $data[] = $player->item(0)->textContent.",".$player->item(1)->textContent;
+
+                // 英語表記
+                $name = $player->item(0)->textContent;
+
+                // 日本語表記
+                $japanize = $player->item(1)->textContent;
+
+                // 最終出場年
+                $last_year = $player->item(3)->textContent;
+
+                // 備考（Jr. 表記がある場合は、英語表記をJr.に変更）
+                $misc = $player->item(4)->textContent;
+                if (strpos($misc, $name." Jr.") !== false) {
+                    $name = $name." Jr.";
+                    $japanize = $japanize."・ジュニア";
+                }
+
+                $alldata[] = $name.",".$japanize;
+
+                // 現役選手のみ
+                if ($last_year === '') {
+                    $data[] = $name.",".$japanize;
+                }
             }
 
             // htmlファイルを削除
@@ -71,6 +94,7 @@ class CsvDataCreator {
         }
 
         file_put_contents(MlbPlayersNameConst::DATA_FILEPATH, implode("\n", $data));
+        file_put_contents(MlbPlayersNameConst::DATA_FILEPATH_ALL, implode("\n", $alldata));
     }
     
 }
