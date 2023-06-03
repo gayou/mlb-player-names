@@ -28,18 +28,21 @@ class CsvDataCreator {
     private static function loadWikipedia()
     {
         // WikipediaからMLB選手の一覧を取得
-        $html = '';
-        for ($i = ord('A'); $i <= ord('Z'); $i++) {
-            $cache_file_path = MlbPlayersNameConst::CACHE_DIR.chr($i).'.html';
+        $html = file_get_contents(MlbPlayersNameConst::RESOURCE_URL);
 
-            // ファイルキャッシュが存在する場合
-            if (file_exists($cache_file_path)) {
-                $html = file_get_contents($cache_file_path);
-            }
-            else {
-                $html = file_get_contents(MlbPlayersNameConst::RESOURCE_URL.'_'.chr($i));
-                file_put_contents($cache_file_path, $html);
-            }
+        $document = new DOMDocument();
+        @$document->loadHTML($html);
+
+        $xpath = new DOMXpath($document);
+        $result = $xpath->query('//table[@class="toc plainlinks"]/tbody/tr/td/a[@href]');
+        foreach ($result as $anchor) {
+            $href = $anchor->getAttribute('href');
+            
+            $initial = $anchor->textContent;
+            $cache_file_path = MlbPlayersNameConst::CACHE_DIR.$initial.'.html';
+
+            $html = file_get_contents("https://ja.wikipedia.org".$href);
+            file_put_contents($cache_file_path, $html);
         }
     }
 
@@ -62,6 +65,9 @@ class CsvDataCreator {
                 $player = $xpath->query(".//td", $row);
                 $data[] = $player->item(0)->textContent.",".$player->item(1)->textContent;
             }
+
+            // htmlファイルを削除
+            unlink($file_path);
         }
 
         file_put_contents(MlbPlayersNameConst::DATA_FILEPATH, implode("\n", $data));

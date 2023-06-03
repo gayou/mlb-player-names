@@ -23,7 +23,7 @@
     },
     "scripts": {
         "setup-mlb-players-name": [
-            "php setup.php"
+            "Gayou\\MlbPlayersName\\CsvDataCreator::setup"
         ],
         "post-install-cmd": [
             "composer setup-mlb-players-name"
