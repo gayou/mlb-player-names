@@ -1,1 +1,1 @@
-# mlb-player-names
+# mlb-players-name
