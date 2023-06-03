@@ -30,6 +30,13 @@
         ],
         "post-update-cmd": [
             "composer setup-mlb-players-name"
-          ]
+        ],
+        "post-package-install": [
+            "composer setup-mlb-players-name"
+        ],
+        "post-package-update": [
+            "composer setup-mlb-players-name"
+        ]
+
     }
 }
