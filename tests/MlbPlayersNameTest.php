@@ -13,7 +13,10 @@ class MlbPlayersNameTest extends TestCase
         MlbPlayersName::init();
     }
 
-
+    /**
+     * 現役選手の名前を取得できること
+     * 
+     */
     public function testJapanize()
     {
         // マイク・トラウト

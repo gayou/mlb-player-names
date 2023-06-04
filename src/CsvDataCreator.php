@@ -15,7 +15,12 @@ class CsvDataCreator {
     {
     }
     
-    public static function setup()
+    /**
+     * 初期化処理
+     * 
+     * @return void
+     */
+    public static function setup() : void
     {
         // WikipediaからMLB選手の一覧を取得
         self::loadWikipedia();
@@ -25,7 +30,12 @@ class CsvDataCreator {
     }
 
 
-    private static function loadWikipedia()
+    /**
+     * WikipedidからMLB選手の一覧を取得してキャッシュする
+     * 
+     * @return void
+     */
+    private static function loadWikipedia() : void
     {
         // WikipediaからMLB選手の一覧を取得
         $html = file_get_contents(MlbPlayersNameConst::RESOURCE_URL);
@@ -33,6 +43,7 @@ class CsvDataCreator {
         $document = new DOMDocument();
         @$document->loadHTML($html);
 
+        // イニシャルごとのページをクローリングする
         $xpath = new DOMXpath($document);
         $result = $xpath->query('//table[@class="toc plainlinks"]/tbody/tr/td/a[@href]');
         foreach ($result as $anchor) {
@@ -47,10 +58,16 @@ class CsvDataCreator {
     }
 
 
-    private static function createCsvData()
+    /**
+     * 選手名の英語表記、日本語表記の対応表を出力する
+     * 
+     * @return void
+     */
+    private static function createCsvData() : void
     {
         $data = [];
         $alldata = [];
+
         $document = new DOMDocument();
         foreach (glob(MlbPlayersNameConst::CACHE_DIR.'*.html') as $file_path) {
             // htmlファイルロード
@@ -81,11 +98,13 @@ class CsvDataCreator {
                     $japanize = $japanize."・ジュニア";
                 }
 
-                $alldata[] = $name.",".$japanize;
+                $line = $name.",".$japanize;
+
+                $alldata[] = $line;
 
                 // 現役選手のみ
                 if ($last_year === '') {
-                    $data[] = $name.",".$japanize;
+                    $data[] = $line;
                 }
             }
 
@@ -93,6 +112,7 @@ class CsvDataCreator {
             unlink($file_path);
         }
 
+        // csvファイル出力
         file_put_contents(MlbPlayersNameConst::DATA_FILEPATH, implode("\n", $data));
         file_put_contents(MlbPlayersNameConst::DATA_FILEPATH_ALL, implode("\n", $alldata));
     }

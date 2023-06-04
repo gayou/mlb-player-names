@@ -9,24 +9,28 @@ use Gayou\MlbPlayersName\MlbPlayersNameConst;
 class MlbPlayersName {
     
     private static $map = [];
-    
-    function __construct()
-    {
-    }
-
-    
-    public static function init()
+        
+    /**
+     * 初期化処理
+     * 
+     */
+    public static function init() : void
     {
         // 選手名のmapを作成
         self::$map = self::loadCsvData();
     }
 
 
+    /**
+     * csvファイルを読み込んで選手名の英語表記、日本語表記の連想配列を生成
+     * 
+     * @return array 選手名の英語表記、日本語表記の連想配列
+     */
     private static function loadCsvData() : array
     {
         $map = [];
 
-        // csvファイルをロードして選手名のmapを生成
+        // csvファイルをロードして選手名の連想配列を生成
         $fp = fopen(MlbPlayersNameConst::DATA_FILEPATH, 'r');
 
         while ($line = fgetcsv($fp)) {
@@ -41,6 +45,9 @@ class MlbPlayersName {
 
     /**
      * 選手名を日本語表記（カタカナ、日本語）で返す
+     * 
+     * @param string $name 選手名（英語表記）
+     * @return string 選手名（日本語表記）
      */
     public static function japanize(string $name) : string
     {
