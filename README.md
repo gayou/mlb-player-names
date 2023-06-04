@@ -28,7 +28,7 @@ require_once "vendor/autoload.php";
 use Gayou\MlbPlayersName\MlbPlayersName;
 
 MlbPlayersName::init();
-echo MlbPlayersName::japanize('Mike Troutt').PHP_EOL;
+echo MlbPlayersName::japanize('Mike Trout').PHP_EOL;
 echo MlbPlayersName::japanize('Shohei Ohtani').PHP_EOL;
 ```
 
