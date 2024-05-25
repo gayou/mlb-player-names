@@ -16,4 +16,18 @@ class MlbPlayersNameConst {
 
     public const DATA_FILEPATH= __DIR__.'/../data/player.csv';
 
+    public const NORMALIZE_MAP = [
+        'á' => 'a',
+        'é' => 'e',
+        'í' => 'i',
+        'ó' => 'o',
+        'ú' => 'u',
+        'ñ' => 'n',
+        'Á' => 'A',
+        'É' => 'E',
+        'Í' => 'I',
+        'Ó' => 'O',
+        'Ú' => 'U',
+        'Ñ' => 'N'
+    ];
 }
